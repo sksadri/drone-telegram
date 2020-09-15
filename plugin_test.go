@@ -210,30 +210,27 @@ func TestEscapeMarkdownOne(t *testing.T) {
 }
 
 func TestParseTo(t *testing.T) {
-	input := []string{"0", "1:1@gmail.com", "2:2@gmail.com", "3:3@gmail.com", "4", "5"}
+	input := []string{"0", "1", "2", "3", "4", "5"}
 
-	ids := parseTo(input, "1@gmail.com", false)
-	assert.Equal(t, []int64{0, 4, 5, 1}, ids)
+	ids := parseTo(input)
+	assert.Equal(t, []int64{0, 1, 2, 3, 4, 5}, ids)
 
-	ids = parseTo(input, "1@gmail.com", true)
+	/*ids = parseTo(input)
 	assert.Equal(t, []int64{1}, ids)
 
-	ids = parseTo(input, "a@gmail.com", false)
+	ids = parseTo(input)
 	assert.Equal(t, []int64{0, 4, 5}, ids)
 
-	ids = parseTo(input, "a@gmail.com", true)
-	assert.Equal(t, []int64{0, 4, 5}, ids)
+	ids = parseTo(input)
+	assert.Equal(t, []int64{0, 4, 5}, ids)*/
 
-	// test empty ids
-	ids = parseTo([]string{"", " ", "   "}, "a@gmail.com", true)
-	assert.Equal(t, 0, len(ids))
 }
 
 func TestGlobList(t *testing.T) {
 	var input []string
 	var result []string
 
-	input = []string{"tests/gophercolor.png", "測試", "3"}
+	input = []string{"tests/gophercolor.png", "ds", "3"}
 	result = []string{"tests/gophercolor.png"}
 	assert.Equal(t, result, globList(input))
 

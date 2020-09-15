@@ -219,39 +219,15 @@ func loadTextFromFile(filename string) ([]string, error) {
 	return []string{string(content)}, nil
 }
 
-func parseTo(to []string, authorEmail string, matchEmail bool) []int64 {
-	var emails []int64
+func parseTo(to []string) []int64 {
 	var ids []int64
-	attachEmail := true
-
-	for _, value := range trimElement(to) {
-		idArray := trimElement(strings.Split(value, ":"))
-
-		// check id
-		id, err := strconv.ParseInt(idArray[0], 10, 64)
-		if err != nil {
-			continue
-		}
-
-		// check match author email
-		if len(idArray) > 1 {
-			if email := idArray[1]; email != authorEmail {
-				continue
-			}
-
-			emails = append(emails, id)
-			attachEmail = false
-			continue
-		}
-
-		ids = append(ids, id)
-	}
-
-	if matchEmail && !attachEmail {
-		return emails
-	}
-
-	ids = append(ids, emails...)
+    for _, value := range trimElement(to) {
+        id, err := strconv.ParseInt(strings.Trim(value, " "), 10, 64)
+        if err != nil {
+            continue
+        }
+        ids = append(ids, id)
+    }
 
 	return ids
 }
@@ -302,7 +278,7 @@ func (p Plugin) Exec() (err error) {
 
 	bot.Debug = p.Config.Debug
 
-	ids := parseTo(p.Config.To, p.Commit.Email, p.Config.MatchEmail)
+	ids := parseTo(p.Config.To) 
 	photos := globList(trimElement(p.Config.Photo))
 	documents := globList(trimElement(p.Config.Document))
 	stickers := globList(trimElement(p.Config.Sticker))
